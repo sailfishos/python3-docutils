@@ -1,19 +1,18 @@
 # Adapted from Fedora's packaging (2014-02-17)
 # http://pkgs.fedoraproject.org/cgit/python-docutils.git/tree/python-docutils.spec
 
-Name:           python-docutils
+Name:           python3-docutils
 Version:        0.11
 Release:        1
 Summary:        System for processing plaintext documentation
-Group:          Development/Languages
 # See COPYING.txt for information
 License:        Public Domain and BSD and Python and GPLv3+
 URL:            http://docutils.sourceforge.net
 Source0:        %{name}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python2-devel
-BuildRequires:  python-setuptools
-Requires:       python-imaging
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+Requires:       python3-imaging
 
 %description
 The Docutils project specifies a plaintext markup language, reStructuredText,
@@ -27,7 +26,7 @@ PEPs (Python Enhancement Proposals).  Work is underway to parse rST from
 Python inline documentation modules and packages.
 
 %prep
-%setup -q -n %{name}-%{version}/docutils
+%autosetup -n %{name}-%{version}/docutils
 
 # Remove shebang from library files
 for file in docutils/utils/{code_analyzer.py,punctuation_chars.py,error_reporting.py,smartquotes.py} docutils/utils/math/{latex2mathml.py,math2html.py} docutils/writers/xetex/__init__.py; do
@@ -38,12 +37,10 @@ iconv -f ISO88592 -t UTF8 tools/editors/emacs/IDEAS.rst > tmp
 mv tmp tools/editors/emacs/IDEAS.rst
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
+%py3_build
 
 %install
-rm -rf %{buildroot}
-
-%{__python} setup.py install --skip-build --root %{buildroot}
+%py3_install
 
 for file in %{buildroot}/%{_bindir}/*.py; do
     mv $file `dirname $file`/`basename $file .py`
@@ -55,10 +52,8 @@ rm -f licenses/docutils.conf
 # Flash file shouldn't be in the installed package.
 rm -f docs/user/rst/images/biohazard.swf
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %defattr(-,root,root,-)
+%license COPYING.txt licenses/*
 %{_bindir}/*
-%{python_sitelib}/*
+%{python3_sitelib}/*
