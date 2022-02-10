@@ -2,7 +2,7 @@
 # http://pkgs.fedoraproject.org/cgit/python-docutils.git/tree/python-docutils.spec
 
 Name:           python3-docutils
-Version:        0.11
+Version:        0.18.1
 Release:        1
 Summary:        System for processing plaintext documentation
 # See COPYING.txt for information
